@@ -1,0 +1,18 @@
+# Visual Studio Code
+.vscode/
+.vscode/*.json
+.vscode/*.code-workspace
+
+# Compiled output
+out/
+dist/
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
