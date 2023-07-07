@@ -1,14 +1,13 @@
 // Prototype code for LM Intern project team 2 
 // Luke Henderson
 
-
 #include <Arduino.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
-#include "src/MeSingleLineFollower.h"
-#include "src/MeCollisionSensor.h"
-#include "src/MeBarrierSensor.h"
-#include "src/MeNewRGBLed.h"
+#include "lib/MeSingleLineFollower.h"
+#include "lib/MeCollisionSensor.h"
+#include "lib/MeBarrierSensor.h"
+#include "lib/MeNewRGBLed.h"
 #include <MeMegaPi.h>
 
 // Initialize
