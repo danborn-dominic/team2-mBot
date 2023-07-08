@@ -6,6 +6,7 @@
 # Compiled output
 out/
 dist/
+build/
 
 # Dependency directories
 node_modules/

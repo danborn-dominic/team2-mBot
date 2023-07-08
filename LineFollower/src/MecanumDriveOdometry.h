@@ -1,5 +1,3 @@
-// MecanumDriveOdometry.h
-
 #ifndef MECANUM_DRIVE_ODOMETRY_H
 #define MECANUM_DRIVE_ODOMETRY_H
 

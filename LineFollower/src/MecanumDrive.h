@@ -1,8 +1,7 @@
-// MecanumDrive.h
-
 #ifndef MECANUM_DRIVE_H
 #define MECANUM_DRIVE_H
 
+// As long as other library is installed it should work fine
 #include <MeMegaPiDCMotor.h>
 
 class MecanumDrive {
@@ -17,7 +16,7 @@ public:
 
 private:
     // Changes speed to be a value from -1 to 1
-    void setSpeed(double speed);
+    int normalization(double speed);
     MeMegaPiDCMotor& motorFL_;
     MeMegaPiDCMotor& motorFR_;
     MeMegaPiDCMotor& motorRL_;

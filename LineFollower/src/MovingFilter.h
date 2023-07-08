@@ -1,5 +1,3 @@
-// MovingAverageFilter.h
-
 #ifndef MOVING_AVERAGE_FILTER_H
 #define MOVING_AVERAGE_FILTER_H
 

@@ -1,6 +1,4 @@
-// MovingAverageFilter.cpp
-
-#include "MovingAverageFilter.h"
+#include "MovingFilter.h"
 
 MovingAverageFilter::MovingAverageFilter(size_t window_size): window_size_(window_size) {
     if (window_size == 0) 
@@ -8,17 +6,17 @@ MovingAverageFilter::MovingAverageFilter(size_t window_size): window_size_(windo
 }
 
 void MovingAverageFilter::addData(int data) {
-    if(dataQueue.size() == window_size) {
-        sum -= dataQueue.front();
-        dataQueue.pop_front();
+    if(dataQueue_.size() == window_size_) {
+        sum_ -= dataQueue_.front();
+        dataQueue_.pop_front();
     }
 
-    dataQueue.push_back(data);
-    sum += data;
+    dataQueue_.push_back(data);
+    sum_ += data;
 }
 
 double MovingAverageFilter::getAverage() const {
-    if (dataQueue.empty()) 
+    if (dataQueue_.empty()) 
         throw std::domain_error("No data available");
-    return static_cast<double>(sum) / dataQueue.size();
+    return static_cast<double>(sum_) / dataQueue_.size();
 }

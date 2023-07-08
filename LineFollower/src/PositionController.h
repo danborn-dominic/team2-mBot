@@ -1,10 +1,5 @@
-// PositionController.h
-
 #ifndef POSITION_CONTROLLER_H
 #define POSITION_CONTROLLER_H
-
-#include "MecanumDrive.h"
-#include "MecanumDriveOdometry.h"
 
 class PositionController {
 public:
@@ -25,7 +20,7 @@ public:
     */
     void update(double x, double y, double theta, double *forwardSpeed, double *strafeSpeed, double *rotationalSpeed);
     // Returns true if the robot is at the target position
-    bool isAtTargetPosition() const;
+    bool isAtTargetPosition(double x, double y, double theta) const;
 
 private:
     double kP_, kI_, kD_;
