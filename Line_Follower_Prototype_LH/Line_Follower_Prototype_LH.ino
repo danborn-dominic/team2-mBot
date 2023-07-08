@@ -63,70 +63,108 @@ void _loop() {
 
 // Important stuff down here
 void loop() {
-  //senses white
-  if(((linefollower_63.readSensor() == 0))  &&  ((linefollower_64.readSensor() == 0))){
-      //green
-      rgbled_67.setColor(0, 0, 255, 0);
-      rgbled_67.show();
-      //green
-      rgbled_68.setColor(0, 0, 255, 0);
-      rgbled_68.show();
+  //change percent speed (default is 50%)
+  float speed = 60; 
+  //if object seen
+  if(barrier_60.isBarried() || barrier_61.isBarried() || barrier_62.isBarried()){
+    //purple
+    rgbled_67.setColor(0, 175, 0, 255);
+    rgbled_67.show();
+    //purple
+    rgbled_68.setColor(0, 175, 0, 255);
+    rgbled_68.show();
 
-      motor_1.run(50 / 100.0 * 255);
-      motor_2.run(50 / 100.0 * 255);
+    motor_1.run(-speed / 100.0 * 255);
+    motor_2.run(speed / 100.0 * 255);
 
-      motor_9.run(50 / 100.0 * 255);
-      motor_10.run(50 / 100.0 * 255);
+    motor_9.run(speed / 100.0 * 255);
+    motor_10.run(-speed / 100.0 * 255);
 
+    _delay(0.5);
+
+    motor_1.run(-speed / 100.0 * 255);
+    motor_2.run(speed / 100.0 * 255);
+
+    motor_9.run(-speed / 100.0 * 255);
+    motor_10.run(speed / 100.0 * 255);
+
+    _delay(0.7);
+
+    motor_1.run(speed / 100.0 * 255);
+    motor_2.run(-speed / 100.0 * 255);
+
+    motor_9.run(-speed / 100.0 * 255);
+    motor_10.run(speed / 100.0 * 255);
+
+    _delay(0.5);
   }
-  // left black, right white --> turn left
-  if(((linefollower_63.readSensor() == 1))  &&  ((linefollower_64.readSensor() == 0))){
-      //blue
-      rgbled_67.setColor(0, 0, 0, 255);
-      rgbled_67.show();
-      //blue
-      rgbled_68.setColor(0, 0, 0, 255);
-      rgbled_68.show();
+  //if no object seen
+  else{
+    //senses white --> turn right
+    if(((linefollower_63.readSensor() == 0))  &&  ((linefollower_64.readSensor() == 0))){
+        //green
+        rgbled_67.setColor(0, 0, 255, 0);
+        rgbled_67.show();
+        //green
+        rgbled_68.setColor(0, 0, 255, 0);
+        rgbled_68.show();
 
-      motor_1.run(50 / 100.0 * 255);
-      motor_2.run(50 / 100.0 * 255);
+        motor_1.run(speed / 100.0 * 255);
+        motor_2.run(speed / 100.0 * 255);
 
-      motor_9.run(50 / 100.0 * 255);
-      motor_10.run(50 / 100.0 * 255);
+        motor_9.run(speed / 100.0 * 255);
+        motor_10.run(speed / 100.0 * 255);
+        
 
+    }
+    // left black, right white --> turn left
+    if(((linefollower_63.readSensor() == 1))  &&  ((linefollower_64.readSensor() == 0))){
+        //blue
+        rgbled_67.setColor(0, 0, 0, 255);
+        rgbled_67.show();
+        //blue
+        rgbled_68.setColor(0, 0, 0, 255);
+        rgbled_68.show();
+
+        motor_1.run(speed / 100.0 * 255);
+        motor_2.run(speed / 100.0 * 255);
+
+        motor_9.run(speed / 100.0 * 255);
+        motor_10.run(speed / 100.0 * 255);
+
+    }
+    // left white, right black --> turn right
+    if(((linefollower_63.readSensor() == 0))  &&  ((linefollower_64.readSensor() == 1))){
+        //yellow
+        rgbled_67.setColor(0, 255, 200, 0);
+        rgbled_67.show();
+        //yellow
+        rgbled_68.setColor(0, 255, 200, 0);
+        rgbled_68.show();
+
+        motor_1.run(-speed / 100.0 * 255);
+        motor_2.run(-speed / 100.0 * 255);
+
+        motor_9.run(-speed / 100.0 * 255);
+        motor_10.run(-speed / 100.0 * 255);
+
+    }
+    // left black, right black --> go straight
+    if(((linefollower_63.readSensor() == 1))  &&  ((linefollower_64.readSensor() == 1))){
+        //red
+        rgbled_67.setColor(0, 255, 0, 0);
+        rgbled_67.show();
+        //red
+        rgbled_68.setColor(0, 255, 0, 0);
+        rgbled_68.show();
+
+        motor_1.run(-speed / 100.0 * 255);
+        motor_2.run(speed / 100.0 * 255);
+
+        motor_9.run(-speed / 100.0 * 255);
+        motor_10.run(speed / 100.0 * 255);
+
+    }
   }
-  // left white, right black --> turn right
-  if(((linefollower_63.readSensor() == 0))  &&  ((linefollower_64.readSensor() == 1))){
-      //yellow
-      rgbled_67.setColor(0, 255, 255, 0);
-      rgbled_67.show();
-      //yellow
-      rgbled_68.setColor(0, 255, 255, 0);
-      rgbled_68.show();
-
-      motor_1.run(-50 / 100.0 * 255);
-      motor_2.run(-50 / 100.0 * 255);
-
-      motor_9.run(-50 / 100.0 * 255);
-      motor_10.run(-50 / 100.0 * 255);
-
-  }
-  // left black, right black --> spin until find line
-  if(((linefollower_63.readSensor() == 1))  &&  ((linefollower_64.readSensor() == 1))){
-      //red
-      rgbled_67.setColor(0, 255, 0, 0);
-      rgbled_67.show();
-      //red
-      rgbled_68.setColor(0, 255, 0, 0);
-      rgbled_68.show();
-
-      motor_1.run(-50/ 100.0 * 255);
-      motor_2.run(50 / 100.0 * 255);
-
-      motor_9.run(-50 / 100.0 * 255);
-      motor_10.run(50 / 100.0 * 255);
-
-  }
-
   _loop();
 }
