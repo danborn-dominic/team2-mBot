@@ -1,5 +1,5 @@
 # team2-mBot
-Arduino and controls code for the mBot Mega
+Arduino and controls code for the mBot Mega.
 
 ## Installation and deployment
 
@@ -7,17 +7,19 @@ Arduino and controls code for the mBot Mega
 - Upload code using Arduino IDE/CLI or VSCode arduino extension
 
 ## Testing
-Make sure cmake is installed
-- To run tests, run the following commands:
+### Googletest
+Make sure cmake is installed and might need to install googletest.
 ```bash
 cd LineFollower
 ./runtests.sh
 ```
-- To run gui need to install conan package manager and make sure to create a profile
+### Dear ImGui
+To build gui, need to install conan package manager and create a profile.
 ```bash
+pip install conan
 conan profile detect --force
 ```
-- To build and run gui, run the following commands:
+Build and run gui.
 ```bash
 cd LineFollower
 conan install . --build=missing
