@@ -1,7 +1,5 @@
 // Prototype code for LM Intern project team 2 
 // Luke Henderson
-
-
 #include <Arduino.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
@@ -23,25 +21,84 @@ MeMegaPiDCMotor motor_1(1);
 MeMegaPiDCMotor motor_2(2);
 MeMegaPiDCMotor motor_9(9);
 MeMegaPiDCMotor motor_10(10);
-MeMegaPiDCMotor motor_3(3);
-MeMegaPiDCMotor motor_11(11);
-MeMegaPiDCMotor motor_4(4);
-MeMegaPiDCMotor motor_12(12);
 
 double angle_rad = PI/180.0;
 double angle_deg = 180.0/PI;
-
+//change percent speed
+float speed = 60; 
 float RGB = 0;
 float light_num = 0;
 
+enum Direction {
+  FORWARD,
+  BACKWARD,
+  CLOCKWISE,
+  COUNTERCLOCKWISE,
+  LEFT,
+  RIGHT,
+  STOP
+};
+
+struct MotorData {
+  int8_t timestamp;
+  Direction direction;
+};
+
+void setMotors(Direction direction) {
+  switch(direction) {
+    case FORWARD:
+      motor_1.run(-speed / 100.0 * 255);
+      motor_2.run(speed / 100.0 * 255);
+      motor_9.run(-speed / 100.0 * 255);
+      motor_10.run(speed / 100.0 * 255);
+      break;
+    case BACKWARD:
+      motor_1.run(speed / 100.0 * 255);
+      motor_2.run(-speed / 100.0 * 255);
+      motor_9.run(speed / 100.0 * 255);
+      motor_10.run(-speed / 100.0 * 255);
+      break;
+    case COUNTERCLOCKWISE:
+      motor_1.run(speed / 100.0 * 255);
+      motor_2.run(speed / 100.0 * 255);
+      motor_9.run(speed / 100.0 * 255);
+      motor_10.run(speed / 100.0 * 255);
+      break;
+    case CLOCKWISE:
+      motor_1.run(-speed / 100.0 * 255);
+      motor_2.run(-speed / 100.0 * 255);
+      motor_9.run(-speed / 100.0 * 255);
+      motor_10.run(-speed / 100.0 * 255);
+      break;
+    case RIGHT:
+      motor_1.run(-speed / 100.0 * 255);
+      motor_2.run(speed / 100.0 * 255);
+      motor_9.run(speed / 100.0 * 255);
+      motor_10.run(-speed / 100.0 * 255);
+      break;
+    case LEFT:
+      motor_1.run(speed / 100.0 * 255);
+      motor_2.run(-speed / 100.0 * 255);
+      motor_9.run(-speed / 100.0 * 255);
+      motor_10.run(speed / 100.0 * 255);
+      break;
+    case STOP:
+      motor_1.stop();
+      motor_2.stop();
+      motor_9.stop();
+      motor_10.stop();
+      break;
+  }
+}
+
 //delay
-void _delay(float seconds) {
+/*void delay(float seconds) {
   if(seconds < 0.0){
     seconds = 0.0;
   }
   long endTime = millis() + seconds * 1000;
   while(millis() < endTime) _loop();
-}
+}*/
 
 // setup
 void setup() {
@@ -62,105 +119,70 @@ void setup() {
 
 // Important stuff here
 void loop() {
-
-  // change percent speed (default is 50%)
-  float speed = 60;
-
   // if object seen
   if(barrier_60.isBarried() || barrier_61.isBarried() || barrier_62.isBarried()){
-
     rgbled_67.setColor(0, 175, 0, 255); // purple
     rgbled_67.show();
     rgbled_68.setColor(0, 175, 0, 255); // purple
     rgbled_68.show();
 
     // right strafe
-    motor_1.run(-speed / 100.0 * 255);
-    motor_2.run(speed / 100.0 * 255);
-    motor_9.run(speed / 100.0 * 255);
-    motor_10.run(-speed / 100.0 * 255);
-
-    _delay(0.8);
+    Direction rightStrafe = RIGHT;
+    setMotors(rightStrafe);
+    delay(800);
 
     // forward
-    motor_1.run(-speed / 100.0 * 255);
-    motor_2.run(speed / 100.0 * 255);
-    motor_9.run(-speed / 100.0 * 255);
-    motor_10.run(speed / 100.0 * 255);
-
-    _delay(0.7);
+    Direction forward = FORWARD;
+    setMotors(forward);
+    delay(700);
 
     // left strafe
-    motor_1.run(speed / 100.0 * 255);
-    motor_2.run(-speed / 100.0 * 255);
-    motor_9.run(-speed / 100.0 * 255);
-    motor_10.run(speed / 100.0 * 255);
-
-    _delay(0.8);
+    Direction leftStrafe = LEFT;
+    setMotors(leftStrafe);
+    delay(800);
   }
   //if no object seen
   else{
     //senses white --> spin counter-clockwise until line is found
-    if(((linefollower_63.readSensor() == 0))  &&  ((linefollower_64.readSensor() == 0))){
-
+    if((linefollower_63.readSensor() == 0)  &&  (linefollower_64.readSensor() == 0)){
         rgbled_67.setColor(0, 0, 255, 0); // green
         rgbled_67.show();
         rgbled_68.setColor(0, 0, 255, 0); // green
         rgbled_68.show();
 
         // turn left
-        motor_1.run(speed / 100.0 * 255);
-        motor_2.run(speed / 100.0 * 255);
-        motor_9.run(speed / 100.0 * 255);
-        motor_10.run(speed / 100.0 * 255);
-        
-
+        Direction counterClockwise = COUNTERCLOCKWISE;
+        setMotors(counterClockwise);
     }
     // left black, right white --> turn left
-    if(((linefollower_63.readSensor() == 1))  &&  ((linefollower_64.readSensor() == 0))){
-
+    if((linefollower_63.readSensor() == 1)  &&  (linefollower_64.readSensor() == 0)){
         rgbled_67.setColor(0, 0, 0, 255); // blue
         rgbled_67.show();
         rgbled_68.setColor(0, 0, 0, 255); // blue
         rgbled_68.show();
 
-        // turn left
-        motor_1.run(speed / 100.0 * 255);
-        motor_2.run(speed / 100.0 * 255);
-        motor_9.run(speed / 100.0 * 255);
-        motor_10.run(speed / 100.0 * 255);
-
+        Direction counterClockwise = COUNTERCLOCKWISE;
+        setMotors(counterClockwise);
     }
     // left white, right black --> turn right
-    if(((linefollower_63.readSensor() == 0))  &&  ((linefollower_64.readSensor() == 1))){
-
+    if((linefollower_63.readSensor() == 0)  &&  (linefollower_64.readSensor() == 1)){
         rgbled_67.setColor(0, 255, 200, 0); // yellow
         rgbled_67.show();
         rgbled_68.setColor(0, 255, 200, 0); // yellow
         rgbled_68.show();
 
-        // turn right
-        motor_1.run(-speed / 100.0 * 255);
-        motor_2.run(-speed / 100.0 * 255);
-        motor_9.run(-speed / 100.0 * 255);
-        motor_10.run(-speed / 100.0 * 255);
-
+        Direction clockwise = CLOCKWISE;
+        setMotors(clockwise);
     }
-    // left black, right black --> go straight
-    if(((linefollower_63.readSensor() == 1))  &&  ((linefollower_64.readSensor() == 1))){
-
+    // left black, right black --> go forward
+    if((linefollower_63.readSensor() == 1)  &&  (linefollower_64.readSensor() == 1)){
         rgbled_67.setColor(0, 255, 0, 0); // red
         rgbled_67.show();
         rgbled_68.setColor(0, 255, 0, 0); // red
         rgbled_68.show();
 
-        // forward
-        motor_1.run(-speed / 100.0 * 255);
-        motor_2.run(speed / 100.0 * 255);
-        motor_9.run(-speed / 100.0 * 255);
-        motor_10.run(speed / 100.0 * 255);
-
+        Direction forward = FORWARD;
+        setMotors(forward);
     }
   }
-  _loop();
 }
