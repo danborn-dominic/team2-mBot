@@ -7,6 +7,7 @@
 #include "src/MeCollisionSensor.h"
 #include "src/MeBarrierSensor.h"
 #include "src/MeNewRGBLed.h"
+#include "src/Button.h"
 #include <MeMegaPi.h>
 
 // Initialize
@@ -21,8 +22,8 @@ MeMegaPiDCMotor motor_1(1);
 MeMegaPiDCMotor motor_2(2);
 MeMegaPiDCMotor motor_9(9);
 MeMegaPiDCMotor motor_10(10);
-MeCollisionSensor leftCollision(65);
-MeCollisionSensor rightCollision(66);
+Button leftCollision(65);
+Button rightCollision(66);
 
 double angle_rad = PI / 180.0;
 double angle_deg = 180.0 / PI;
@@ -38,8 +39,8 @@ enum Direction {
 };
 
 enum sensorState {
-  SENSORWHITE,
-  SENSORBLACK
+  SENSORWHITE = 0,
+  SENSORBLACK = 1
 };
 
 struct MotorData {
@@ -124,16 +125,16 @@ void setup() {
 
 void loop() {
   // Only start/stop motors or recording when button is toggled
-  if (leftCollision.isCollision() && !last_left_collision) {
+  if (leftCollision.isPressed() && !last_left_collision) {
     start_recording = !start_recording;
     Serial.println("Changed recording");
   }
-  if (rightCollision.isCollision() && !last_right_collision) {
+  if (rightCollision.isPressed() && !last_right_collision) {
     start_motors = !start_motors;
     Serial.println("Changed motors");
   }
-  last_left_collision = leftCollision.isCollision();
-  last_right_collision = rightCollision.isCollision();
+  last_left_collision = leftCollision.isPressed();
+  last_right_collision = rightCollision.isPressed();
   // If motors aren't started or recording, do nothing
   if (!start_motors) {
     setMotors(STOP);
@@ -143,6 +144,7 @@ void loop() {
     rgbled_68.show();
     return;
   }
+  // TODO: save to eeprom 
   if (data_num == max_data) {
     Serial.println("max data reached");
     setMotors(STOP);
@@ -177,6 +179,7 @@ void loop() {
       }
       delay(motor_data[i].timestamp - motor_data[i - 1].timestamp);
     }
+    start_motors = false;
   }
   // if object seen and not recording
   if ((barrier_60.isBarried() || barrier_61.isBarried() || barrier_62.isBarried())) {
