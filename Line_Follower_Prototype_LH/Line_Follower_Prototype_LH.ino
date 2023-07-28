@@ -154,29 +154,7 @@ void loop() {
     // Play back data that was recorded in motor_data
     Serial.println("playback");
     for (int i = 1; i < data_num; i++) {
-      switch (motor_data[i].direction) {
-        case FORWARD:
-          setMotors(FORWARD);
-          break;
-        case BACKWARD:
-          setMotors(BACKWARD);
-          break;
-        case COUNTERCLOCKWISE:
-          setMotors(COUNTERCLOCKWISE);
-          break;
-        case CLOCKWISE:
-          setMotors(CLOCKWISE);
-          break;
-        case RIGHT:
-          setMotors(RIGHT);
-          break;
-        case LEFT:
-          setMotors(LEFT);
-          break;
-        case STOP:
-          setMotors(STOP);
-          break;
-      }
+      setMotors(motor_data[i-1].direction)
       delay(motor_data[i].timestamp - motor_data[i - 1].timestamp);
     }
     start_motors = false;

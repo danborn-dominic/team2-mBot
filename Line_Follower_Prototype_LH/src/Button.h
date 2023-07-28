@@ -5,7 +5,7 @@
 
 class Button {
 public:
-    Button(uint8_t port, unsigned int debounceDelay = 50);
+    Button(uint8_t port, unsigned int debounceDelay = 100);
     bool isPressed();
 private:
     MeCollisionSensor _collisionSensor;
